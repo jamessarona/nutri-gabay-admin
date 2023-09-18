@@ -1,9 +1,12 @@
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
+import 'package:nutri_gabay_admin/services/baseauth.dart';
 import 'package:nutri_gabay_admin/views/shared/app_style.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final BaseAuth auth;
+  final VoidCallback onSignOut;
+  const MainPage({super.key, required this.auth, required this.onSignOut});
 
   @override
   State<MainPage> createState() => _MainPageState();

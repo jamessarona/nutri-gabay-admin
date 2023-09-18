@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:nutri_gabay_admin/root_page.dart';
+import 'package:nutri_gabay_admin/services/baseauth.dart';
 import 'package:nutri_gabay_admin/views/ui/login_page.dart';
 
 Future<void> main() async {
@@ -26,7 +28,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'NutriGabay',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const LoginPage(),
+      home: Root(
+        auth: FireBaseAuth(),
+      ),
     );
   }
 }

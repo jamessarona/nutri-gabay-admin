@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nutri_gabay_admin/models/admin_controller.dart';
+import 'package:nutri_gabay_admin/services/baseauth.dart';
 import 'package:nutri_gabay_admin/views/shared/app_style.dart';
 import 'package:nutri_gabay_admin/views/shared/custom_buttons.dart';
 import 'package:nutri_gabay_admin/views/shared/custom_text_fields.dart';
 import 'package:nutri_gabay_admin/views/ui/main_page.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final VoidCallback? onSignIn;
+  final BaseAuth auth;
+  const LoginPage({super.key, this.onSignIn, required this.auth});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -21,21 +26,46 @@ class _LoginPageState extends State<LoginPage> {
   bool isObscure = true;
   String loginMsg = '';
 
+  late Admin admin;
+
   void validation() async {
+    String userUID;
     loginMsg = '';
     if (_formKey.currentState!.validate()) {
       final collection = FirebaseFirestore.instance.collection('admin');
 
       collection
           .where('username', isEqualTo: _username.text)
-          .where('password', isEqualTo: _password.text)
           .get()
-          .then((querySnapshot) {
+          .then((querySnapshot) async {
         if (querySnapshot.size > 0) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => const MainPage()),
+          final collection = FirebaseFirestore.instance
+              .collection('admin')
+              .where('username', isEqualTo: _username.text)
+              .withConverter(
+                fromFirestore: Admin.fromFirestore,
+                toFirestore: (Admin city, _) => city.toFirestore(),
+              );
+
+          await collection.get().then(
+            (querySnapshot) async {
+              for (var docSnapshot in querySnapshot.docs) {
+                admin = docSnapshot.data();
+
+                try {
+                  userUID = await widget.auth
+                      .signInWithEmailAndPassword(admin.email, _password.text);
+                  // ignore: unnecessary_null_comparison
+                  if (userUID != null) {
+                    widget.onSignIn!();
+                  }
+                } on FirebaseAuthException {
+                  loginMsg = 'Incorrect username or password';
+                }
+              }
+
+              setState(() {});
+            },
           );
         } else {
           loginMsg = 'Incorrect username or password';
