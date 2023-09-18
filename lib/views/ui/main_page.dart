@@ -2,7 +2,10 @@ import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:nutri_gabay_admin/services/baseauth.dart';
 import 'package:nutri_gabay_admin/views/shared/app_style.dart';
-import 'package:nutri_gabay_admin/views/ui/dashboard.dart';
+import 'package:nutri_gabay_admin/views/ui/dashboard_page.dart';
+import 'package:nutri_gabay_admin/views/ui/doctor_list_page.dart';
+import 'package:nutri_gabay_admin/views/ui/doctor_registration_page.dart';
+import 'package:universal_html/html.dart' as html;
 
 class MainPage extends StatefulWidget {
   final BaseAuth auth;
@@ -37,6 +40,7 @@ class _MainPageState extends State<MainPage> {
             controller: sideMenu,
             showToggle: false,
             style: SideMenuStyle(
+              backgroundColor: Colors.white,
               displayMode: SideMenuDisplayMode.auto,
               hoverColor: customColor,
               selectedHoverColor: customColor,
@@ -74,7 +78,11 @@ class _MainPageState extends State<MainPage> {
                 SideMenuItem(
                   title: 'Exit',
                   icon: const Icon(Icons.exit_to_app),
-                  onTap: (index, _) {},
+                  onTap: (index, _) {
+                    FireBaseAuth()
+                        .signOut()
+                        .then((value) async => html.window.location.reload());
+                  },
                 ),
               ],
             ),
@@ -105,44 +113,10 @@ class _MainPageState extends State<MainPage> {
           Expanded(
             child: PageView(
               controller: pageController,
-              children: [
-                const DashboardPage(),
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Add a Nutritionist',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'List of Nutrisionists',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Settings',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Settings',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
+              children: const [
+                DashboardPage(),
+                DoctorRegistration(),
+                DoctorListPage(),
               ],
             ),
           ),

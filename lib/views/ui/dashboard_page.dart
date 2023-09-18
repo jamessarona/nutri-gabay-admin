@@ -42,9 +42,10 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: double.infinity,
       width: double.infinity,
+      color: Colors.grey.shade100,
       child: Column(
         children: [
           Container(
