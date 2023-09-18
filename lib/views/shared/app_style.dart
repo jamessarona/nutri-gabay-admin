@@ -24,4 +24,6 @@ const MaterialColor customColor = MaterialColor(0xff8bc24a, <int, Color>{
   30: Color(0xffc5e1a4),
   40: Color(0xffed9376),
   50: Color(0xfffc4342),
+  60: Color(0xffb2ce91),
+  70: Color(0xfffbe5ae),
 });

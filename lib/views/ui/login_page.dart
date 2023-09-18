@@ -7,7 +7,6 @@ import 'package:nutri_gabay_admin/services/baseauth.dart';
 import 'package:nutri_gabay_admin/views/shared/app_style.dart';
 import 'package:nutri_gabay_admin/views/shared/custom_buttons.dart';
 import 'package:nutri_gabay_admin/views/shared/custom_text_fields.dart';
-import 'package:nutri_gabay_admin/views/ui/main_page.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback? onSignIn;

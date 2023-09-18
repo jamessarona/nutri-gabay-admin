@@ -2,6 +2,7 @@ import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:nutri_gabay_admin/services/baseauth.dart';
 import 'package:nutri_gabay_admin/views/shared/app_style.dart';
+import 'package:nutri_gabay_admin/views/ui/dashboard.dart';
 
 class MainPage extends StatefulWidget {
   final BaseAuth auth;
@@ -105,15 +106,7 @@ class _MainPageState extends State<MainPage> {
             child: PageView(
               controller: pageController,
               children: [
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Dashboard',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
+                const DashboardPage(),
                 Container(
                   color: Colors.white,
                   child: const Center(
