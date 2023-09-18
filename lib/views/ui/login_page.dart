@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nutri_gabay_admin/views/shared/app_style.dart';
 import 'package:nutri_gabay_admin/views/shared/custom_buttons.dart';
 import 'package:nutri_gabay_admin/views/shared/custom_text_fields.dart';
-import 'package:nutri_gabay_admin/views/ui/home_page.dart';
+import 'package:nutri_gabay_admin/views/ui/main_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) => const HomePage()),
+                builder: (BuildContext context) => const MainPage()),
           );
         } else {
           loginMsg = 'Incorrect username or password';
@@ -51,56 +51,55 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: SizedBox(
-        height: screenSize.height,
-        width: screenSize.width,
+        height: double.infinity,
+        width: double.infinity,
         child: ListView(
           children: [
             Form(
               key: _formKey,
-              child: Container(
-                margin:
-                    EdgeInsets.symmetric(horizontal: screenSize.width * 0.4),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: screenSize.height * 0.15,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: screenSize.height * 0.15,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(16, 45, 0, 0),
+                        height: 60,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/logo-name.png"),
+                            fit: BoxFit.fitHeight,
+                          ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(16, 45, 0, 0),
-                          height: 60,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/logo-name.png"),
-                              fit: BoxFit.fitHeight,
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        'Welcome Admin',
+                        style: appstyle(
+                          20,
+                          Colors.black,
+                          FontWeight.w800,
+                        ).copyWith(
+                          shadows: const <Shadow>[
+                            Shadow(
+                              offset: Offset(-1, 10),
+                              blurRadius: 3.0,
+                              color: Colors.grey,
                             ),
-                          ),
+                          ],
                         ),
-                        const SizedBox(height: 20),
-                        Text(
-                          'Welcome Admin',
-                          style: appstyle(
-                            20,
-                            Colors.black,
-                            FontWeight.w800,
-                          ).copyWith(
-                            shadows: const <Shadow>[
-                              Shadow(
-                                offset: Offset(-1, 10),
-                                blurRadius: 3.0,
-                                color: Colors.grey,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 50),
-                    Text(
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 50),
+                  SizedBox(
+                    width: 400,
+                    child: Text(
                       "Username",
                       style: appstyle(
                         12,
@@ -108,8 +107,11 @@ class _LoginPageState extends State<LoginPage> {
                         FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    UserCredentialTextField(
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: 400,
+                    child: UserCredentialTextField(
                       controller: _username,
                       label: "",
                       isObscure: false,
@@ -118,8 +120,11 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 20),
-                    Text(
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 400,
+                    child: Text(
                       "Password",
                       style: appstyle(
                         12,
@@ -127,8 +132,11 @@ class _LoginPageState extends State<LoginPage> {
                         FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    UserCredentialTextField(
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: 400,
+                    child: UserCredentialTextField(
                       controller: _password,
                       label: "",
                       isObscure: isObscure,
@@ -145,30 +153,29 @@ class _LoginPageState extends State<LoginPage> {
                         });
                       },
                     ),
-                    const SizedBox(height: 20),
-                    Text(
-                      loginMsg,
-                      style: appstyle(
-                        11,
-                        Colors.red,
-                        FontWeight.bold,
-                      ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    loginMsg,
+                    style: appstyle(
+                      11,
+                      Colors.red,
+                      FontWeight.bold,
                     ),
-                    const SizedBox(height: 20),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 80),
-                      width: double.infinity,
-                      height: 40,
-                      child: UserCredentialPrimaryButton(
-                        onPress: () {
-                          validation();
-                        },
-                        label: "Login",
-                        labelSize: 15,
-                      ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 200,
+                    height: 40,
+                    child: UserCredentialPrimaryButton(
+                      onPress: () {
+                        validation();
+                      },
+                      label: "Login",
+                      labelSize: 15,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
