@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:nutri_gabay_admin/models/admin_controller.dart';
+import 'package:nutri_gabay_admin/models/admin.dart';
 import 'package:nutri_gabay_admin/services/baseauth.dart';
 import 'package:nutri_gabay_admin/views/shared/app_style.dart';
 import 'package:nutri_gabay_admin/views/shared/custom_buttons.dart';

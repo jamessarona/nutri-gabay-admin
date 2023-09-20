@@ -78,7 +78,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           DashBoardContainer(
                             title:
                                 '${patientCount.toString()} Patient${patientCount != 1 ? 's' : ''}',
-                            icon: FontAwesomeIcons.userDoctor,
+                            icon: FontAwesomeIcons.userInjured,
                           ),
                         ],
                       )
@@ -94,7 +94,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           DashBoardContainer(
                             title:
                                 '${patientCount.toString()} Patient${patientCount != 1 ? 's' : ''}',
-                            icon: FontAwesomeIcons.userDoctor,
+                            icon: FontAwesomeIcons.userInjured,
                           ),
                         ],
                       )),
