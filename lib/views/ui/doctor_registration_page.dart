@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -40,6 +41,9 @@ class _DoctorRegistrationState extends State<DoctorRegistration> {
 
   File? image;
   Uint8List webImage = Uint8List(8);
+  Uint8List webPdfFile = Uint8List(8);
+  String? webPdfFileName;
+
   Future<bool> register() async {
     if (RegExp(regEx).hasMatch(_email.text)) {
       isEmailExist = await hasExistingAccount();
@@ -79,7 +83,9 @@ class _DoctorRegistrationState extends State<DoctorRegistration> {
       phone: _phone.text,
       birthdate: _birthdate.text,
       address: _address.text,
+      specialization: "Nutritionist",
       image: '',
+      file: '',
     );
 
     final json = user.toJson();
@@ -98,29 +104,51 @@ class _DoctorRegistrationState extends State<DoctorRegistration> {
         webImage = Uint8List(8);
       });
     }
+    if (webPdfFileName != null) {
+      await uploadPdfFile(user.uid).whenComplete(() {
+        webPdfFileName = null;
+        webPdfFile = Uint8List(8);
+      });
+    }
     setState(() {});
   }
 
   Future<void> uploadImage(String uid) async {
     try {
-      var snapshot =
-          await FirebaseStorage.instance.ref('images/profiles/$uid').putData(
-                webImage,
-                SettableMetadata(contentType: 'image/jpeg'),
-              );
+      var snapshot = await FirebaseStorage.instance
+          .ref('images/profiles/doctors/$uid')
+          .putData(
+            webImage,
+            SettableMetadata(contentType: 'image/jpeg'),
+          );
 
       var downloadUrl = await snapshot.ref.getDownloadURL();
 
-      saveImageToDatabase(uid, downloadUrl);
+      saveImageToDatabase(uid, downloadUrl, "image");
       // ignore: empty_catches
     } on FirebaseException {}
   }
 
-  Future<void> saveImageToDatabase(String uid, String url) async {
+  Future<void> uploadPdfFile(String uid) async {
+    try {
+      var snapshot =
+          await FirebaseStorage.instance.ref('files/doctors/$uid.pdf').putData(
+                webPdfFile,
+                SettableMetadata(contentType: 'application/pdf'),
+              );
+
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+
+      saveImageToDatabase(uid, downloadUrl, "file");
+      // ignore: empty_catches
+    } on FirebaseException {}
+  }
+
+  Future<void> saveImageToDatabase(String uid, String url, String field) async {
     try {
       final collection = FirebaseFirestore.instance.collection('doctor');
 
-      await collection.doc(uid).update({"image": url});
+      await collection.doc(uid).update({field: url});
       // ignore: empty_catches
     } on FirebaseException {}
   }
@@ -144,6 +172,23 @@ class _DoctorRegistrationState extends State<DoctorRegistration> {
           webImage = f;
           final pickedImage = File(image.path);
           this.image = pickedImage;
+        });
+      }
+    }
+  }
+
+  Future pickPdfFile() async {
+    if (kIsWeb) {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['pdf'],
+          allowMultiple: false);
+
+      if (result != null) {
+        setState(() {
+          webPdfFileName = null;
+          webPdfFile = result.files.first.bytes!;
+          webPdfFileName = result.files.first.name;
         });
       }
     }
@@ -228,9 +273,31 @@ class _DoctorRegistrationState extends State<DoctorRegistration> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 50,
-                        width: 50,
+                      Container(
+                        height: 90,
+                        width: screenSize.width * 0.4,
+                        alignment: Alignment.bottomLeft,
+                        child: InkWell(
+                          splashColor: customColor,
+                          onTap: () {
+                            pickPdfFile();
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(
+                                FontAwesomeIcons.fileCirclePlus,
+                                color: Colors.black54,
+                                size: 25,
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                webPdfFileName ?? 'Attach file',
+                                style: appstyle(
+                                    15, Colors.black, FontWeight.normal),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
