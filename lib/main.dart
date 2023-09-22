@@ -1,21 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nutri_gabay_admin/root_page.dart';
 import 'package:nutri_gabay_admin/services/baseauth.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: kIsWeb
-          ? const FirebaseOptions(
-              apiKey: "AIzaSyAweCHAdtTnW7QjPDmPF73HqiO_mCIHaF4",
-              projectId: "nutri-gabay",
-              messagingSenderId: "376018937615",
-              appId: "1:376018937615:web:2debaaf176272bacd6c07a",
-              storageBucket: 'nutri-gabay.appspot.com',
-            )
-          : null);
+      options: const FirebaseOptions(
+    apiKey: "AIzaSyAweCHAdtTnW7QjPDmPF73HqiO_mCIHaF4",
+    projectId: "nutri-gabay",
+    messagingSenderId: "376018937615",
+    appId: "1:376018937615:web:2debaaf176272bacd6c07a",
+    storageBucket: 'nutri-gabay.appspot.com',
+  ));
 
   runApp(const MyApp());
 }
