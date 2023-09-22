@@ -4,8 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nutri_gabay_admin/models/doctor.dart';
 import 'package:nutri_gabay_admin/views/shared/app_style.dart';
 import 'package:nutri_gabay_admin/views/shared/custom_table.dart';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:js' as js;
+import 'package:url_launcher/url_launcher_string.dart';
 
 class DoctorListPage extends StatefulWidget {
   const DoctorListPage({super.key});
@@ -151,8 +150,7 @@ class _DoctorListPageState extends State<DoctorListPage> {
                                         child: data['file'] != ''
                                             ? IconButton(
                                                 onPressed: () {
-                                                  js.context.callMethod(
-                                                      'open', [data['file']]);
+                                                  launchUrlString(data['file']);
                                                 },
                                                 icon: const Icon(
                                                   FontAwesomeIcons.filePdf,
