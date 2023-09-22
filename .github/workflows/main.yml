@@ -6,10 +6,10 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         # Checkout Repository
-        - uses: actions/checkout@v1
+        - uses: actions/checkout@v3
 
         # Install Flutter command
-        - uses: subosito/flutter-action@v3.2.0
+        - uses: subosito/flutter-action@v2
           with:
             channel: 'dev'
 
@@ -23,7 +23,7 @@ jobs:
 
         # Deploy Firebase Hosting
         - name: Deploy Firebase Hosting
-          uses: w9jds/firebase-action@master
+          uses: w9jds/firebase-action@main
           with:
             args: deploy --only hosting:nutri-gabay
           env:
