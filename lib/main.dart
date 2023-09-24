@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'NutriGabay',
+      title: 'NutriGabay Admin',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: Root(
         auth: FireBaseAuth(),
