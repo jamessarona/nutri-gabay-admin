@@ -86,6 +86,8 @@ class _DoctorRegistrationState extends State<DoctorRegistration> {
       specialization: "Nutritionist",
       image: '',
       file: '',
+      about: '',
+      specialties: '',
     );
 
     final json = user.toJson();
