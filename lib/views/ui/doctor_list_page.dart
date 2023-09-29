@@ -56,7 +56,7 @@ class _DoctorListPageState extends State<DoctorListPage> {
                 );
               }
               if (!snapshot.hasData) {
-                return const Text('data');
+                return const Text('No Records');
               }
 
               return Expanded(

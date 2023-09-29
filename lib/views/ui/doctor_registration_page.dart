@@ -84,7 +84,8 @@ class _DoctorRegistrationState extends State<DoctorRegistration> {
       birthdate: _birthdate.text,
       address: _address.text,
       specialization: "Nutritionist",
-      image: '',
+      image:
+          'https://firebasestorage.googleapis.com/v0/b/nutri-gabay.appspot.com/o/images%2Fprofiles%2Fdefault%2Fdefault.png?alt=media&token=fce52102-d785-4883-ae5a-f7d26fa502ce',
       file: '',
       about: '',
       specialties: '',
