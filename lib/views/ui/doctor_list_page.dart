@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nutri_gabay_admin/models/doctor.dart';
@@ -18,6 +19,59 @@ class _DoctorListPageState extends State<DoctorListPage> {
   late List<Doctor> a;
   final Stream<QuerySnapshot> _doctorStream =
       FirebaseFirestore.instance.collection('doctor').snapshots();
+
+  showAlertDialog(BuildContext context, String nutritionistId) {
+    Widget cancelButton = TextButton(
+      child: Text(
+        "Cancel",
+        style: appstyle(14, Colors.black, FontWeight.normal),
+      ),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text(
+        "Delete",
+        style: appstyle(14, Colors.red, FontWeight.bold),
+      ),
+      onPressed: () async {
+        await deleteNutritionist(nutritionistId).whenComplete(() {
+          Navigator.of(context).pop();
+          setState(() {});
+        });
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text(
+        "Confirmation",
+        style: appstyle(15, Colors.black, FontWeight.bold),
+      ),
+      content: Text(
+        "Are you sure you want to delete this nutritionist?",
+        style: appstyle(13, Colors.black, FontWeight.normal),
+      ),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  Future<void> deleteNutritionist(String nutritionistId) async {
+    final docUser =
+        FirebaseFirestore.instance.collection('doctor').doc(nutritionistId);
+    await docUser.delete();
+  }
+
   @override
   Widget build(BuildContext context) {
     screenSize = MediaQuery.of(context).size;
@@ -80,12 +134,13 @@ class _DoctorListPageState extends State<DoctorListPage> {
                           Table(
                             columnWidths: const {
                               0: FractionColumnWidth(0.11),
-                              1: FractionColumnWidth(0.17),
-                              2: FractionColumnWidth(0.17),
+                              1: FractionColumnWidth(0.15),
+                              2: FractionColumnWidth(0.15),
                               3: FractionColumnWidth(0.1),
                               4: FractionColumnWidth(0.11),
-                              5: FractionColumnWidth(0.24),
+                              5: FractionColumnWidth(0.2),
                               6: FractionColumnWidth(0.1),
+                              7: FractionColumnWidth(0.08),
                             },
                             children: const [
                               TableRow(
@@ -104,6 +159,8 @@ class _DoctorListPageState extends State<DoctorListPage> {
                                       title: 'City', isCenter: false),
                                   TableCellHeaderLabel(
                                       title: 'Document', isCenter: true),
+                                  TableCellHeaderLabel(
+                                      title: 'Delete', isCenter: true),
                                 ],
                               ),
                             ],
@@ -111,12 +168,12 @@ class _DoctorListPageState extends State<DoctorListPage> {
                           Table(
                             columnWidths: const {
                               0: FractionColumnWidth(0.11),
-                              1: FractionColumnWidth(0.17),
-                              2: FractionColumnWidth(0.17),
+                              1: FractionColumnWidth(0.15),
+                              2: FractionColumnWidth(0.15),
                               3: FractionColumnWidth(0.1),
                               4: FractionColumnWidth(0.11),
-                              5: FractionColumnWidth(0.24),
-                              6: FractionColumnWidth(0.1),
+                              5: FractionColumnWidth(0.2),
+                              7: FractionColumnWidth(0.08),
                             },
                             border: const TableBorder(
                               top: BorderSide(width: 1),
@@ -158,6 +215,22 @@ class _DoctorListPageState extends State<DoctorListPage> {
                                                 ),
                                               )
                                             : const Text(''),
+                                      ),
+                                    ),
+                                    TableCell(
+                                      child: Container(
+                                        height: 40,
+                                        alignment: Alignment.center,
+                                        child: IconButton(
+                                          onPressed: () {
+                                            showAlertDialog(
+                                                context, data['uid']);
+                                          },
+                                          icon: const Icon(
+                                            FontAwesomeIcons.trashCan,
+                                            color: Colors.red,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ]);
