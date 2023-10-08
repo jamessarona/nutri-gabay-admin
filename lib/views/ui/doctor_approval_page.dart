@@ -107,7 +107,7 @@ class _DoctorApprovalPageState extends State<DoctorApprovalPage> {
     Doctor doctor = docSnap.data()!;
 
     //Update Approve Nutritionist
-    final docUser = FirebaseFirestore.instance.collection('doctor').doc();
+    final docUser = FirebaseFirestore.instance.collection('doctor').doc(newUID);
 
     Doctor user = Doctor(
       uid: docUser.id,
