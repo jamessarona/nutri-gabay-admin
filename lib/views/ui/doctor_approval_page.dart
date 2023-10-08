@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nutri_gabay_admin/models/doctor.dart';
 import 'package:nutri_gabay_admin/services/baseauth.dart';
 import 'package:nutri_gabay_admin/views/shared/app_style.dart';
 import 'package:nutri_gabay_admin/views/shared/custom_table.dart';
@@ -84,11 +85,49 @@ class _DoctorApprovalPageState extends State<DoctorApprovalPage> {
 
   Future<void> approveNutritionist(
       String nutritionistId, String email, String password) async {
-    final docUser =
-        FirebaseFirestore.instance.collection('doctor').doc(nutritionistId);
-    await docUser.update({"status": "Approve"});
+    String userUID =
+        await FireBaseAuth().signUpWithEmailAndPassword(email, email);
+    if (userUID != '') {
+      createNutritionist(userUID, nutritionistId).whenComplete(() {
+        deleteNutritionist(nutritionistId);
+      });
+    }
+  }
 
-    await FireBaseAuth().signUpWithEmailAndPassword(email, password);
+  Future<void> createNutritionist(String newUID, String oldUID) async {
+    //Get Pending Nutritionist Profile
+    final ref = FirebaseFirestore.instance
+        .collection("doctor")
+        .doc(oldUID)
+        .withConverter(
+          fromFirestore: Doctor.fromFirestore,
+          toFirestore: (Doctor patient, _) => patient.toFirestore(),
+        );
+    final docSnap = await ref.get();
+    Doctor doctor = docSnap.data()!;
+
+    //Update Approve Nutritionist
+    final docUser = FirebaseFirestore.instance.collection('doctor').doc();
+
+    Doctor user = Doctor(
+      uid: docUser.id,
+      name: doctor.name,
+      email: doctor.email,
+      phone: doctor.phone,
+      birthdate: doctor.birthdate,
+      address: doctor.address,
+      specialization: doctor.specialization,
+      image: doctor.image,
+      file: doctor.file,
+      about: doctor.about,
+      specialties: doctor.specialties,
+      status: 'Approve',
+      password: doctor.password,
+    );
+
+    final json = user.toJson();
+    await docUser.set(json);
+    setState(() {});
   }
 
   @override
