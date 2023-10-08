@@ -25,7 +25,9 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void getNutritionistCount() async {
-    final collection = FirebaseFirestore.instance.collection('doctor');
+    final collection = FirebaseFirestore.instance
+        .collection('doctor')
+        .where("status", isNotEqualTo: "Pending");
 
     await collection.get().then((querySnapshot) async {
       nutritionistCount = querySnapshot.size;

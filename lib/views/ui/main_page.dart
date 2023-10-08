@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nutri_gabay_admin/services/baseauth.dart';
 import 'package:nutri_gabay_admin/views/shared/app_style.dart';
 import 'package:nutri_gabay_admin/views/ui/dashboard_page.dart';
+import 'package:nutri_gabay_admin/views/ui/doctor_approval_page.dart';
 import 'package:nutri_gabay_admin/views/ui/doctor_list_page.dart';
 import 'package:nutri_gabay_admin/views/ui/doctor_registration_page.dart';
 import 'package:universal_html/html.dart' as html;
@@ -108,6 +109,13 @@ class _MainPageState extends State<MainPage> {
                 },
                 icon: const Icon(Icons.people),
               ),
+              SideMenuItem(
+                title: 'Nutritionist Approval',
+                onTap: (index, _) {
+                  sideMenu.changePage(index);
+                },
+                icon: const Icon(Icons.approval),
+              ),
             ],
           ),
           Expanded(
@@ -117,6 +125,7 @@ class _MainPageState extends State<MainPage> {
                 DashboardPage(),
                 DoctorRegistration(),
                 DoctorListPage(),
+                DoctorApprovalPage(),
               ],
             ),
           ),

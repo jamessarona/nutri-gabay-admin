@@ -1,25 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nutri_gabay_admin/services/baseauth.dart';
 import 'package:nutri_gabay_admin/views/shared/app_style.dart';
 import 'package:nutri_gabay_admin/views/shared/custom_table.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class DoctorListPage extends StatefulWidget {
-  const DoctorListPage({super.key});
+class DoctorApprovalPage extends StatefulWidget {
+  const DoctorApprovalPage({super.key});
 
   @override
-  State<DoctorListPage> createState() => _DoctorListPageState();
+  State<DoctorApprovalPage> createState() => _DoctorApprovalPageState();
 }
 
-class _DoctorListPageState extends State<DoctorListPage> {
+class _DoctorApprovalPageState extends State<DoctorApprovalPage> {
   late Size screenSize;
   final Stream<QuerySnapshot> _doctorStream = FirebaseFirestore.instance
       .collection('doctor')
-      .where("status", isNotEqualTo: "Pending")
+      .where("status", isEqualTo: "Pending")
       .snapshots();
 
-  showAlertDialog(BuildContext context, String nutritionistId) {
+  showAlertDialog(BuildContext context, String nutritionistId, int method,
+      String email, String password) {
     Widget cancelButton = TextButton(
       child: Text(
         "Cancel",
@@ -31,14 +33,23 @@ class _DoctorListPageState extends State<DoctorListPage> {
     );
     Widget continueButton = TextButton(
       child: Text(
-        "Delete",
-        style: appstyle(14, Colors.red, FontWeight.bold),
+        method == 0 ? "Decline" : "Approve",
+        style: appstyle(
+            14, method == 0 ? Colors.red : Colors.green, FontWeight.bold),
       ),
       onPressed: () async {
-        await deleteNutritionist(nutritionistId).whenComplete(() {
-          Navigator.of(context).pop();
-          setState(() {});
-        });
+        if (method == 0) {
+          await deleteNutritionist(nutritionistId).whenComplete(() {
+            Navigator.of(context).pop();
+            setState(() {});
+          });
+        } else {
+          await approveNutritionist(nutritionistId, email, password)
+              .whenComplete(() {
+            Navigator.of(context).pop();
+            setState(() {});
+          });
+        }
       },
     );
 
@@ -48,7 +59,7 @@ class _DoctorListPageState extends State<DoctorListPage> {
         style: appstyle(15, Colors.black, FontWeight.bold),
       ),
       content: Text(
-        "Are you sure you want to delete this nutritionist?",
+        "Are you sure you want to ${method == 0 ? "decline" : "approve"} this registration?",
         style: appstyle(13, Colors.black, FontWeight.normal),
       ),
       actions: [
@@ -71,6 +82,15 @@ class _DoctorListPageState extends State<DoctorListPage> {
     await docUser.delete();
   }
 
+  Future<void> approveNutritionist(
+      String nutritionistId, String email, String password) async {
+    final docUser =
+        FirebaseFirestore.instance.collection('doctor').doc(nutritionistId);
+    await docUser.update({"status": "Approve"});
+
+    await FireBaseAuth().signUpWithEmailAndPassword(email, password);
+  }
+
   @override
   Widget build(BuildContext context) {
     screenSize = MediaQuery.of(context).size;
@@ -87,7 +107,7 @@ class _DoctorListPageState extends State<DoctorListPage> {
             color: customColor[70],
             alignment: Alignment.centerLeft,
             child: Text(
-              'List of Nutritionist - Added',
+              'Nutritionist Approval',
               style: appstyle(
                 25,
                 Colors.black,
@@ -220,15 +240,40 @@ class _DoctorListPageState extends State<DoctorListPage> {
                                       child: Container(
                                         height: 40,
                                         alignment: Alignment.center,
-                                        child: IconButton(
-                                          onPressed: () {
-                                            showAlertDialog(
-                                                context, data['uid']);
-                                          },
-                                          icon: const Icon(
-                                            FontAwesomeIcons.trashCan,
-                                            color: Colors.red,
-                                          ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {
+                                                showAlertDialog(
+                                                    context,
+                                                    data['uid'],
+                                                    0,
+                                                    data['email'],
+                                                    data['password']);
+                                              },
+                                              icon: const Icon(
+                                                FontAwesomeIcons.xmark,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            IconButton(
+                                              onPressed: () {
+                                                showAlertDialog(
+                                                    context,
+                                                    data['uid'],
+                                                    1,
+                                                    data['email'],
+                                                    data['password']);
+                                              },
+                                              icon: const Icon(
+                                                FontAwesomeIcons.check,
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),

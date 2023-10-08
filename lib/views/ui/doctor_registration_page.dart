@@ -89,6 +89,8 @@ class _DoctorRegistrationState extends State<DoctorRegistration> {
       file: '',
       about: '',
       specialties: '',
+      status: 'Approved',
+      password: _password.text,
     );
 
     final json = user.toJson();
