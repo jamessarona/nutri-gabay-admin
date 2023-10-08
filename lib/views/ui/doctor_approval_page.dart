@@ -86,7 +86,7 @@ class _DoctorApprovalPageState extends State<DoctorApprovalPage> {
   Future<void> approveNutritionist(
       String nutritionistId, String email, String password) async {
     String userUID =
-        await FireBaseAuth().signUpWithEmailAndPassword(email, email);
+        await FireBaseAuth().signUpWithEmailAndPassword(email, password);
     if (userUID != '') {
       createNutritionist(userUID, nutritionistId).whenComplete(() {
         deleteNutritionist(nutritionistId);
