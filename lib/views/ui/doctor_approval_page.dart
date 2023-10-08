@@ -218,7 +218,7 @@ class _DoctorApprovalPageState extends State<DoctorApprovalPage> {
                                   TableCellHeaderLabel(
                                       title: 'Document', isCenter: true),
                                   TableCellHeaderLabel(
-                                      title: 'Delete', isCenter: true),
+                                      title: 'Action', isCenter: true),
                                 ],
                               ),
                             ],
