@@ -91,6 +91,8 @@ class _DoctorRegistrationState extends State<DoctorRegistration> {
       specialties: '',
       status: 'Approved',
       password: _password.text,
+      isOnline: false,
+      lastActive: DateTime.now(),
     );
 
     final json = user.toJson();

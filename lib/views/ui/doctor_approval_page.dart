@@ -123,6 +123,8 @@ class _DoctorApprovalPageState extends State<DoctorApprovalPage> {
       specialties: doctor.specialties,
       status: 'Approve',
       password: doctor.password,
+      isOnline: doctor.isOnline,
+      lastActive: DateTime.now(),
     );
 
     final json = user.toJson();
